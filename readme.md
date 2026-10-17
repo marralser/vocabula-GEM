@@ -2,7 +2,7 @@
 
 **Vocabula for GEM** is a small, friendly vocabulary trainer for Digital
 Research GEM and OpenGEM. It is written in ANSI C, builds with Open Watcom C,
-and runs as the 16-bit DOS application `VCGEM.APP`.Vocabula for GEM is derived 
+and runs as the 16-bit DOS application `VOCABULA.APP`. Vocabula for GEM is derived 
 from the DOS edition of Vocabula (https://github.com/marralser/Vocabula-DOS).
 
 The current release is **Vocabula for GEM 0.1**.
