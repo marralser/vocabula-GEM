@@ -1,0 +1,92 @@
+VOCABULA GEM 0.1 - EXACT BUILD INSTRUCTIONS
+============================================
+
+These instructions match the BinaryMelodies OpenGEM-Open-Watcom bindings.
+They assume the Linux-hosted Open Watcom tools used for the DOS Vocabula build.
+
+1. EXTRACT BOTH ARCHIVES
+------------------------
+Extract the Vocabula source ZIP into a new directory named vocabula-gem.
+
+Extract OpenGEM-Open-Watcom-master.zip. Rename its resulting directory from
+OpenGEM-Open-Watcom-master to GEMBIND and move it inside vocabula-gem.
+
+The important part of the resulting layout must be:
+
+  vocabula-gem/
+    MAKEFILE
+    gem_app.c
+    lesson.c
+    stats.c
+    GEMBIND/
+      Makefile
+      include/ppdgem.h
+      libsrc/Makefile
+      samples/main.c
+
+Linux commands, when both extracted directories are beside each other:
+
+  mv OpenGEM-Open-Watcom-master vocabula-gem/GEMBIND
+  cd vocabula-gem
+
+2. INITIALISE OPEN WATCOM
+-------------------------
+Use the same Open Watcom environment that successfully builds the DOS edition.
+Check that these commands are available:
+
+  wcc -?
+  wcl -?
+  wlink
+  wlib
+  wasm
+
+The bindings use GNU make, cp and rm, so build them in the Linux shell rather
+than inside plain DOS. Do not use wmake for this first part.
+
+3. BUILD ONLY THE REQUIRED LARGE-MODEL BINDING
+-----------------------------------------------
+From vocabula-gem run:
+
+  make -C GEMBIND/libsrc/large
+  cp GEMBIND/libsrc/large/gembnd-l.lib GEMBIND/lib/gembnd-l.lib
+  make -C GEMBIND/samples main
+
+Verify that both required files now exist:
+
+  ls -l GEMBIND/lib/gembnd-l.lib
+  ls -l GEMBIND/samples/main-l.obj
+
+There is no need to build the small-model library, the accessories, or every
+sample application. Vocabula uses Open Watcom's large memory model (-ml).
+
+4. BUILD VOCABULA
+-----------------
+Still in vocabula-gem, run:
+
+  wmake -f MAKEFILE
+
+The successful result is:
+
+  vocabula.app
+
+5. INSTALL FOR A FIRST TEST
+---------------------------
+Create a directory accessible from your OpenGEM desktop and copy:
+
+  vocabula.app
+  VOC/DEMO.VOC
+  VOC/NORA1.VOC
+
+Keep the VOC directory immediately below the directory containing VOCABULA.APP.
+Start OpenGEM, browse to VOCABULA.APP, and open it.
+
+6. IF THE BUILD FAILS
+---------------------
+Please send the complete output beginning with the first compiler warning or
+error. Do not send only the final "make terminated" line; the first diagnostic
+normally identifies the real incompatibility.
+
+The binding's supplied startup module checks that GEMAES is installed and then
+calls Vocabula's GEMAIN entry point. The application links gembnd-l.lib and uses
+the binding's ppdgem.h declarations directly.
+
